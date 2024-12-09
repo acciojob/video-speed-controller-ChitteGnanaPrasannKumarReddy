@@ -7,14 +7,74 @@
 </head>
 <body>
 
-  <div class="wrapper">
-    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" controls></video>
-    <div class="speed">
+  <div clas/clips.vorwaerts-gmbh.de/VfE_html5.mp4" controls></video>
+    <div cls="wrapper">
+    <video class="flex" width="765" height="430" src="http:/ass="speed">
       <div class="speed-bar">1×</div>
     </div>
   </div>
 
 <script  src="./script.js">
+	// Select elements
+const video = document.querySelector('.viewer');
+const toggle = document.querySelector('.toggle');
+const rewindButton = document.querySelector('.rewind');
+const forwardButton = document.querySelector('.forward');
+const volumeSlider = document.querySelector('.volume');
+const speedSlider = document.querySelector('.playbackSpeed');
+const progress = document.querySelector('.progress');
+const progressBar = document.querySelector('.progress__filled');
+
+// Functions
+function togglePlay() {
+  video.paused ? video.play() : video.pause();
+}
+
+function updateButton() {
+  toggle.textContent = video.paused ? '►' : '❚ ❚';
+}
+
+function handleRewind() {
+  video.currentTime = Math.max(0, video.currentTime - 10);
+}
+
+function handleForward() {
+  video.currentTime = Math.min(video.duration, video.currentTime + 25);
+}
+
+function handleVolumeChange() {
+  video.volume = volumeSlider.value;
+}
+
+function handleSpeedChange() {
+  video.playbackRate = speedSlider.value;
+}
+
+function updateProgress() {
+  const percent = (video.currentTime / video.duration) * 100;
+  progressBar.style.width = `${percent}%`;
+}
+
+function scrub(e) {
+  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+  video.currentTime = scrubTime;
+}
+
+video.addEventListener('click', togglePlay);
+video.addEventListener('play', updateButton);
+video.addEventListener('pause', updateButton);
+video.addEventListener('timeupdate', updateProgress);
+
+toggle.addEventListener('click', togglePlay);
+rewindButton.addEventListener('click', handleRewind);
+forwardButton.addEventListener('click', handleForward);
+
+volumeSlider.addEventListener('input', handleVolumeChange);
+speedSlider.addEventListener('input', handleSpeedChange);
+
+progress.addEventListener('click', scrub);
+progress.addEventListener('mousemove', (e) => e.buttons === 1 && scrub(e)); // Only scrub on drag
+
   //Your code goes here
 </script>
 </body>
